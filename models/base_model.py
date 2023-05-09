@@ -37,11 +37,13 @@ class BaseModel:
     def to_dict(self):
         """Return dictionary representation of object"""
 
-        if type(self.created_at) is not str:
-            self.created_at = self.created_at.isoformat()
-        if type(self.updated_at) is not str:
-            self.updated_at = self.updated_at.isoformat()
-        obj_dict = self.__dict__  # holds dictionary representation object
+        obj_dict = {}  # holds dictionary representation object
+        obj_dict.update(self.__dict__)
+
+        # convert datetime objects to string string (created_at and updated_at)
+        obj_dict['created_at'] = self.created_at.isoformat()
+        obj_dict['updated_at'] = self.updated_at.isoformat()
+        # add object's class name to dictionary
         obj_dict.update({"__class__": type(self).__name__})
 
         return obj_dict
