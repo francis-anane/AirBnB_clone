@@ -12,7 +12,7 @@ class BaseModel:
     __nb_objects (int): Keeps track of base objects count
     """
 
-    def __init__(self, id, created_at, updated_at):
+    def __init__(self):
         """Constructor for BaseModel
         Args:
             id: Unique identity for objects
