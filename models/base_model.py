@@ -8,13 +8,14 @@ from datetime import datetime
 
 class BaseModel:
     """defines all common attributes/methods for the AirBnB_clone objects
-    Attributes:
-    __nb_objects (int): Keeps track of base objects count
     """
 
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
         """Constructor for BaseModel
         Args:
+            args: list of arguments to Basemodel
+            kwargs: key/value arguments to Basemodel
+        Attributes:
             id: Unique identity for objects
             created_at: The time an object was created
             updated_at: The time an object was updated
@@ -43,6 +44,7 @@ class BaseModel:
         # convert datetime objects to string string (created_at and updated_at)
         obj_dict['created_at'] = self.created_at.isoformat()
         obj_dict['updated_at'] = self.updated_at.isoformat()
+
         # add object's class name to dictionary
         obj_dict.update({"__class__": type(self).__name__})
 
