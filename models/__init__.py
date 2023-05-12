@@ -4,5 +4,5 @@ from models.engine.file_storage import FileStorage
 
 storage = FileStorage()  # Unique instance for FileStorage
 
-# Load data from JSON file
+# Load data from JSON file into memory buffer
 storage.reload()

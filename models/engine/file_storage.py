@@ -22,9 +22,9 @@ class FileStorage:
         return self.__objects
 
     def new(self, obj):
-        """Add new object to the dictionary (__objects)
+        """Adds new object to __objects by using <class name>.<id> as key
         Args:
-            obj: class_name.id to add to __objects
+            obj:  An instace of a class
         """
 
         self.__objects.update({f"{type(obj).__name__}.{obj.id}":obj.to_dict()})
@@ -32,7 +32,7 @@ class FileStorage:
     def save(self):
         """ Serializes __objectts to the JSON file __file_path"""
 
-        with open(self.__file_path, "a") as a_file:
+        with open(self.__file_path, "w") as a_file:
             json.dump(self.__objects, a_file)
 
     def reload(self):
