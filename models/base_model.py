@@ -4,7 +4,7 @@
 
 import uuid
 from datetime import datetime
-
+from models import storage  # FileStorage object
 
 class BaseModel:
     """defines all common attributes/methods for the AirBnB_clone objects
@@ -39,7 +39,8 @@ class BaseModel:
                 self.id = str(uuid.uuid4())
                 self.created_at = datetime.now()
                 self.updated_at = datetime.now()
-        except TypeError:
+                storage.new(self)
+        except TypeError as err:
             pass  # for now
 
     def __str__(self):
@@ -49,6 +50,8 @@ class BaseModel:
 
     def save(self):
         """Save object updates"""
+
+        storage.save() # save object to JSON file
 
         self.updated_at = datetime.now()
 
