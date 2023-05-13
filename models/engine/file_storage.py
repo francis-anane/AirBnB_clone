@@ -28,7 +28,8 @@ class FileStorage:
             obj:  An instace of a class
         """
 
-        self.__objects.update({f"{type(obj).__name__}.{obj.id}":obj.to_dict()})
+        key = "{}.{}".format(type(obj).__name__, obj.id)
+        FileStorage.__objects[key] = obj
 
     def save(self):
         """ Serializes __objectts to the JSON file __file_path"""
@@ -63,8 +64,10 @@ class FileStorage:
                 self.__objects = json.load(a_file)
         except FileNotFoundError:
             pass  # pass for now
+
     def attributes(self):
-        # Returns a dictionary mapping class names to dictionaries of attribute names and types
+        # Returns a dictionary mapping class names to dictionaries
+        # of attribute names and types
         attributes = {
             "BaseModel":
                      {"id": str,
