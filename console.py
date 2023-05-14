@@ -130,7 +130,6 @@ class HBNBCommand(cmd.Cmd):
         if not command:
             print("** class name missing **")  # No argument given
         else:
-            # get defined object attributes from dictionary of dictionaries
             # mapping <class names> to attributes
             attr = storage.attributes()
             # attributes that shouldn't be updated
@@ -167,7 +166,6 @@ class HBNBCommand(cmd.Cmd):
                     if attr[args[0]][args[2]] not in excluded_attr:
                         # cast value to attribute type
                         value = attr[args[0]][args[2]](value)
-                        # set attribute by using the dictionary of dictionaries
                         # mapping <class names> to  attributes
                         try:
                             # set attribute  to the value by creating
