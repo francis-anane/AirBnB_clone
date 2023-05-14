@@ -39,7 +39,8 @@ class FileStorage:
             json.dump(self.__objects, a_file)
 
     def classes(self):
-        # Returns a dictionary mapping class names to class objects
+        """Returns a dictionary mapping class names to class objects
+        """
         from models.base_model import BaseModel
         from models.user import User
         from models.state import State
@@ -67,8 +68,8 @@ class FileStorage:
             pass  # pass for now
 
     def attributes(self):
-        # Returns a dictionary mapping class names to dictionaries
-        # of attribute names and types
+        """Returns a dictionary mapping class names to dictionaries
+        of attribute names and types"""
         attributes = {
             "BaseModel":
                      {"id": str,
