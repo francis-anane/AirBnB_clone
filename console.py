@@ -2,7 +2,6 @@
 """console module, contains entry point of the command interperator"""
 
 import cmd
-#from models.base_model import BaseModel
 from models import storage
 
 
@@ -10,7 +9,7 @@ class HBNBCommand(cmd.Cmd):
     """Command interperator class to manage BaseModel objects
     """
 
-    prompt = "(HBNB) " # The Command prompt (overrides the default)
+    prompt = "(HBNB) "  # The Command prompt (overrides the default)
 
     # get dictionary of classes
     __classes = storage.classes()
@@ -104,8 +103,8 @@ class HBNBCommand(cmd.Cmd):
 
     def do_all(self, command):
         """All: displays string representation of available class instances,
-        an optional argument [class name] can also be specified display instance
-        of the class
+        an optional argument [class name] can also be specified display
+        instanceof the class
         """
 
         if not command:
@@ -176,6 +175,7 @@ class HBNBCommand(cmd.Cmd):
                         except (TypeError, KeyError) as err:
                             print(err)
                             pass  # for now
+
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()

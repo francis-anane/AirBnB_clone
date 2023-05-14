@@ -28,9 +28,8 @@ class FileStorage:
             obj:  An instace of a class
         """
 
-        self.__objects.update({f"{type(obj).__name__}.{obj.id}": obj.to_dict()})
-        # key = "{}.{}".format(type(obj).__name__, obj.id)
-        #FileStorage.__objects[key] = obj
+        self.__objects.update(
+            {f"{type(obj).__name__}.{obj.id}": obj.to_dict()})
 
     def save(self):
         """ Serializes __objectts to the JSON file __file_path"""
