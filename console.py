@@ -156,7 +156,13 @@ class HBNBCommand(cmd.Cmd):
                     if value.startswith('"') and value.endswith('"'):
                         value = value.replace('"', '')
                     elif value.startswith("'") and value.endswith("'"):
-                        value = value[3].replace("'", "")
+                        value = value.replace("'", "")
+                    elif not value.startswith('"') and not value.endswith(
+                            '"') and " " in value:
+                        value = value.split()[0]  # get string at first index
+                    elif not value.startswith("'") and not value.endswith(
+                            "'") and " " in value:
+                        value = value.split()[0]  # get string at first index
                     # check attributes that shouldn't be changed
                     if attr[args[0]][args[2]] not in excluded_attr:
                         # cast value to attribute type
@@ -170,10 +176,10 @@ class HBNBCommand(cmd.Cmd):
                                 key])
 
                             # update attribute
+                            print(value)
                             instance.__dict__[args[2]] = value
                             instance.save()
-                        except (TypeError, KeyError) as err:
-                            print(err)
+                        except (TypeError, KeyError):
                             pass  # for now
 
 
