@@ -2,14 +2,21 @@
 """console module, contains entry point of the command interperator"""
 
 import cmd
-from models.base_model import BaseModel
+#from models.base_model import BaseModel
 from models import storage
+
 
 class HBNBCommand(cmd.Cmd):
     """Command interperator class to manage BaseModel objects
     """
 
     prompt = "(HBNB) " # The Command prompt (overrides the default)
+
+    # get dictionary of classes
+    __classes = storage.classes()
+
+    # Get saved objects from storage
+    __models = storage.all()
 
     def do_quit(self, arg):
         """Quit: command to exit the program
@@ -33,17 +40,17 @@ class HBNBCommand(cmd.Cmd):
         pass  # (Don't repeat last command)
 
     def do_create(self, command):
-        """Create: create a new object of BaseModel, save it to a JSON file
+        """Create: create a new class object, save it to a JSON file
         and print the id
         """
 
         if not command:
             print("** class name missing **")  # No argument given
-        elif command !=  "BaseModel":
+        elif command not in self.__classes.keys():
             print("** class doesn't exist **")  # Invalid argument
         else:
             # Create and save an instance to a JSON file
-            new_model = BaseModel()
+            new_model = self.__classes[command]()
             new_model.save()
             print(new_model.id)
 
@@ -57,20 +64,19 @@ class HBNBCommand(cmd.Cmd):
         else:
             # Extract <class name> and <id> from command line
             args = command.split()
-            if args[0] !=  "BaseModel":
+            if args[0] not in self.__classes.keys():
                 print("** class doesn't exist **")
             elif len(args) < 2:
                 print("** instance id missing **")
             else:
-                # Get saved objects from storage
-                models = storage.all()
                 # create key from commandline entry
                 key = f"{args[0]}.{args[1]}"
-                if key not in models.keys():
+                if key not in self.__models.keys():
                     print("** no instance found **")
                 else:
-                    # create an instance from a saved one and print it
-                    print(BaseModel(**models[key]))
+                    # create an instance from a saved one and print it by using
+                    # the dictionary of classes
+                    print(self.__classes[args[0]](**self.__models[key]))
 
     def do_destroy(self, command):
         """Destroy: delete an object base on <class name> and <id>,
@@ -82,20 +88,18 @@ class HBNBCommand(cmd.Cmd):
         else:
             # Extract <class name> and <id> from command line
             args = command.split()
-            if args[0] !=  "BaseModel":
+            if args[0] not in self.__classes.keys():
                 print("** class doesn't exist **")
             elif len(args) < 2:
                 print("** instance id missing **")
             else:
-                # Get saved objects from storage
-                models = storage.all()
                 # create key from commandline entry
                 key = f"{args[0]}.{args[1]}"
-                if key not in models.keys():
+                if key not in self.__models.keys():
                     print("** no instance found **")
                 else:
                     # delete the object and saved the change
-                    models.pop(key)
+                    self.__models.pop(key)
                     storage.save()
 
     def do_all(self, command):
@@ -104,15 +108,19 @@ class HBNBCommand(cmd.Cmd):
         of the class
         """
 
-        # Get saved objects from storage
-        models = storage.all()
-
-        if not command or command == "BaseModel":
-            for key in models.keys():
-                print(BaseModel(**models[key]))
+        if not command:
+            # display models by creating instances from dictionary of classes
+            for key in self.__models.keys():
+                for cls in self.__classes.keys():
+                    if cls in key:
+                        print(self.__classes[cls](**self.__models[key]))
+        elif command in self.__classes.keys():
+            # display models based on specified <class name> by
+            # creating instances from dictionary of classes
+            for key in self.__models.keys():
+                print(self.__classes[command](**self.__models[key]))
         else:
-            if command != "BaseModel":
-                print("** class doesn't exist **")
+            print("** class doesn't exist **")
 
     def do_update(self, command):
         """Update: update an object base onthe  class name and id
@@ -123,8 +131,13 @@ class HBNBCommand(cmd.Cmd):
         if not command:
             print("** class name missing **")  # No argument given
         else:
+            # get defined object attributes from dictionary of dictionaries
+            # mapping <class names> to attributes
+            attr = storage.attributes()
+            # attributes that shouldn't be updated
+            excluded_attr = ("id", "created_at", "updated_at")
             # Extract arguments from command line
-            args = command.split()
+            args = command.split(" ", 3)
             if len(args) == 1:
                 print("** instance id missing **")
             elif len(args) == 2:
@@ -132,15 +145,35 @@ class HBNBCommand(cmd.Cmd):
             elif len(args) == 3:
                 print("** value missing **")
             else:
-                # get objects from storage
-                models = storage.all()
                 # create key from <class name> and <id>
                 key = f"{args[0]}.{args[1]}"
-                if args[0] != "BaseModel":
+                if args[0] not in attr.keys():
                     print("** class doesn't exist **")
-                elif key not in models.keys():
+                elif key not in self.__models.keys():
                     print("** no instance found **")
-
+                else:
+                    value = args[3]
+                    # check for quoted attribute values
+                    if value.startswith('"') and value.endswith('"'):
+                        value = value.replace('"', '')
+                    elif value.startswith("'") and value.endswith("'"):
+                        value = value[3].replace("'", "")
+                    # check attributes that shouldn't be changed
+                    if attr[args[0]][args[2]] not in excluded_attr:
+                        # cast value to attribute type
+                        value = attr[args[0]][args[2]](value)
+                        # set attribute by using the dictionary of dictionaries
+                        # mapping <class names> to  attributes
+                        try:
+                            # set attribute  to the value by creating
+                            # an instance from saved objects
+                            instance = self.__classes[args[0]](**self.__models[
+                                key]).__dict__[args[2]] = value
+                            print(instance)
+                            storage.save()
+                        except (TypeError, KeyError) as err:
+                            print(err)
+                            pass  # for now
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()

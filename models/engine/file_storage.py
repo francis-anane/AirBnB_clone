@@ -28,13 +28,14 @@ class FileStorage:
             obj:  An instace of a class
         """
 
-        key = "{}.{}".format(type(obj).__name__, obj.id)
-        FileStorage.__objects[key] = obj
+        self.__objects.update({f"{type(obj).__name__}.{obj.id}": obj.to_dict()})
+        # key = "{}.{}".format(type(obj).__name__, obj.id)
+        #FileStorage.__objects[key] = obj
 
     def save(self):
         """ Serializes __objectts to the JSON file __file_path"""
 
-        with open(self.__file_path, "w") as a_file:
+        with open(self.__file_path, "w", encoding="utf-8") as a_file:
             json.dump(self.__objects, a_file)
 
     def classes(self):
@@ -60,7 +61,7 @@ class FileStorage:
         """Deserializes the JSON file __file_path to __objects"""
 
         try:
-            with open(self.__file_path, "r") as a_file:
+            with open(self.__file_path, "r", encoding="utf-8") as a_file:
                 self.__objects = json.load(a_file)
         except FileNotFoundError:
             pass  # pass for now
