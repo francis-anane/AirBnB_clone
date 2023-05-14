@@ -33,6 +33,8 @@ class BaseModel:
                     elif key == "updated_at":
                         self.__dict__["updated_at"] = datetime.strptime(
                             kwargs["updated_at"], "%Y-%m-%dT%H:%M:%S.%f")
+                    else:
+                        self.__dict__[key] = kwargs[key]
 
             else:
                 # Create an object with new id and timestamp
@@ -41,6 +43,7 @@ class BaseModel:
                 self.updated_at = datetime.now()
                 storage.new(self)
         except TypeError as err:
+            print(err)
             pass  # for now
 
     def __str__(self):
