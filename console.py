@@ -168,9 +168,11 @@ class HBNBCommand(cmd.Cmd):
                             # set attribute  to the value by creating
                             # an instance from saved objects
                             instance = self.__classes[args[0]](**self.__models[
-                                key]).__dict__[args[2]] = value
-                            print(instance)
-                            storage.save()
+                                key])
+
+                            # update attribute
+                            instance.__dict__[args[2]] = value
+                            instance.save()
                         except (TypeError, KeyError) as err:
                             print(err)
                             pass  # for now
