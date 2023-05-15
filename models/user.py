@@ -11,15 +11,12 @@ class User(BaseModel):
     for email, password, first name, and last name. These attributes represent
     the data associated with a user object.
     """
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        if self.id is None:
-            raise TypeError("id cannot be None")
-        if self.created_at is None:
-            raise TypeError("created_at cannot be None")
-        if self.updated_at is None:
-            raise TypeError("updated_at cannot be None")
+
     email = ""
     password = ""
     first_name = ""
     last_name = ""
+
+    def __init__(self, *args, **kwargs):
+
+        super().__init__(*args, **kwargs)
