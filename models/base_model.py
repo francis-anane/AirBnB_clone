@@ -26,9 +26,7 @@ class BaseModel:
         try:
             if len(kwargs) != 0:
                 for key in kwargs:
-                    if key == "id":
-                        self.__dict__["id"] = kwargs["id"]
-                    elif key == "created_at":
+                    if key == "created_at":
                         self.__dict__["created_at"] = datetime.strptime(
                             kwargs["created_at"], "%Y-%m-%dT%H:%M:%S.%f")
                     elif key == "updated_at":
@@ -44,19 +42,18 @@ class BaseModel:
                 self.updated_at = datetime.now()
                 storage.new(self)
         except TypeError as err:
-            print(err)
             pass  # for now
 
     def __str__(self):
         """Return string representation of the class"""
 
-        return "[{}] ({}) {}".\
-            format(type(self).__name__, self.id, self.__dict__)
+        return "[{}] ({}) {}".format(
+            type(self).__name__, self.id, self.__dict__)
 
     def save(self):
         """Save object updates"""
 
-        storage.save()  # save object to JSON file
+        storage.save(self)  # save object to JSON file
 
         self.updated_at = datetime.now()
 

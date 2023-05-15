@@ -99,7 +99,7 @@ class HBNBCommand(cmd.Cmd):
                 else:
                     # delete the object and saved the change
                     self.__models.pop(key)
-                    storage.save()
+                    storage.save(self)
 
     def do_all(self, command):
         """All: displays string representation of available class instances,
@@ -162,22 +162,22 @@ class HBNBCommand(cmd.Cmd):
                     elif not value.startswith("'") and not value.endswith(
                             "'") and " " in value:
                         value = value.split()[0]  # get string at first index
-                    # check attributes that shouldn't be changed
-                    if attr[args[0]][args[2]] not in excluded_attr:
-                        # cast value to attribute type
-                        value = attr[args[0]][args[2]](value)
-                        # mapping <class names> to  attributes
-                        try:
-                            # set attribute  to the value by creating
-                            # an instance from saved objects
+
+                    try:
+                        # check attributes that shouldn't be changed
+                        if attr[args[0]][args[2]] not in excluded_attr:
+                            # cast value to attribute type
+                            value = attr[args[0]][args[2]](value)
+                            # create an instance from saved objects
                             instance = self.__classes[args[0]](**self.__models[
                                 key])
 
-                            # update attribute
+                            # update attribute by updating object __dict__
                             instance.__dict__[args[2]] = value
+                            # save the change
                             instance.save()
-                        except (TypeError, KeyError):
-                            pass  # for now
+                    except (TypeError, KeyError, ValueError):
+                        pass  # for now
 
 
 if __name__ == "__main__":

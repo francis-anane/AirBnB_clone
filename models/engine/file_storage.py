@@ -31,8 +31,15 @@ class FileStorage:
         self.__objects.update(
             {f"{type(obj).__name__}.{obj.id}": obj.to_dict()})
 
-    def save(self):
+    def save(self, obj):
         """ Serializes __objectts to the JSON file __file_path"""
+
+        try:
+            # reassign to include updated key/values of attributes
+            # in the JSON file
+            self.__objects[f"{type(obj).__name__}.{obj.id}"] = obj.to_dict()
+        except AttributeError:
+            pass  # for now
 
         with open(self.__file_path, "w", encoding="utf-8") as a_file:
             json.dump(self.__objects, a_file)
