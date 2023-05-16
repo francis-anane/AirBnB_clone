@@ -9,7 +9,7 @@ class HBNBCommand(cmd.Cmd):
     """Command interperator class to manage BaseModel objects
     """
 
-    prompt = "(HBNB) "  # The Command prompt (overrides the default)
+    prompt = "(hbnb) "  # The Command prompt (overrides the default)
 
     # get dictionary of classes
     __classes = storage.classes()
@@ -149,6 +149,9 @@ class HBNBCommand(cmd.Cmd):
                     print("** class doesn't exist **")
                 elif key not in self.__models.keys():
                     print("** no instance found **")
+                # check attributes that shouldn't be changed
+                elif args[2] in excluded_attr:
+                    return
                 else:
                     value = args[3]
                     # check for quoted attribute values
@@ -158,26 +161,28 @@ class HBNBCommand(cmd.Cmd):
                         value = value.replace("'", "")
                     elif not value.startswith('"') and not value.endswith(
                             '"') and " " in value:
-                        value = value.split()[0]  # get string at first index
+                        value = value.split(" ")[0]  # get string at first index
                     elif not value.startswith("'") and not value.endswith(
                             "'") and " " in value:
-                        value = value.split()[0]  # get string at first index
+                        value = value.split(" ")[0]  # get string at first index
+
+                    # create an instance from saved objects to
+                    # manuplate attributes
+                    instance = self.__classes[args[0]](**self.__models[key])
 
                     try:
-                        # check attributes that shouldn't be changed
-                        if attr[args[0]][args[2]] not in excluded_attr:
-                            # cast value to attribute type
-                            value = attr[args[0]][args[2]](value)
-                            # create an instance from saved objects
-                            instance = self.__classes[args[0]](**self.__models[
-                                key])
-
-                            # update attribute by updating object __dict__
+                        # cast value to attribute type
+                        value = attr[args[0]][args[2]](value)
+                        # update attribute by updating <object.__dict__>
+                        instance.__dict__[args[2]] = value
+                        # save the change
+                        instance.save()
+                    except (KeyError, ValueError) as err:
+                        # Add a new attribute if specified in command
+                        # not found
+                        if type(err).__name__ == "KeyError":
                             instance.__dict__[args[2]] = value
-                            # save the change
                             instance.save()
-                    except (TypeError, KeyError, ValueError):
-                        pass  # for now
 
 
 if __name__ == "__main__":
