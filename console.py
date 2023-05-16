@@ -73,9 +73,8 @@ class HBNBCommand(cmd.Cmd):
                 if key not in self.__models.keys():
                     print("** no instance found **")
                 else:
-                    # create an instance from a saved one and print it by using
-                    # the dictionary of classes
-                    print(self.__classes[args[0]](**self.__models[key]))
+                    # print object by mapping keys to values
+                    print(self.__models[key])
 
     def do_destroy(self, command):
         """Destroy: delete an object base on <class name> and <id>,
@@ -108,16 +107,14 @@ class HBNBCommand(cmd.Cmd):
         """
 
         if not command:
-            # display models by creating instances from dictionary of classes
+            # print models by mapping keys to values
             for key in self.__models.keys():
-                for cls in self.__classes.keys():
-                    if cls in key:
-                        print(self.__classes[cls](**self.__models[key]))
+                print(self.__models[key])
         elif command in self.__classes.keys():
-            # display models based on specified <class name> by
-            # creating instances from dictionary of classes
+            # display models based on specified <class name>
             for key in self.__models.keys():
-                print(self.__classes[command](**self.__models[key]))
+                if command in key:
+                    print(self.__models[key])
         else:
             print("** class doesn't exist **")
 
@@ -168,25 +165,19 @@ class HBNBCommand(cmd.Cmd):
                         # get string at first index
                         value = value.split(" ")[0]
 
-                    # create an instance from saved objects to
-                    # manuplate attributes
-                    instance = self.__classes[args[0]](**self.__models[key])
-
                     try:
                         # cast value to attribute type
                         value = attr[args[0]][args[2]](value)
                         # update attribute by updating <object.__dict__>
-                        instance.__dict__[args[2]] = value
+                        self.__models[key].__dict__[args[2]] = value
                         # save the change
-                        instance.save()
+                        self.__models[key].save()
                     except (KeyError, ValueError) as err:
                         # Add a new attribute if specified in command
                         # not found
                         if type(err).__name__ == "KeyError":
-                            instance.__dict__[args[2]] = value
-                            instance.save()  # save the change
-                    except (TypeError, KeyError, ValueError):
-                        pass  # for now
+                            self.__models[key].__dict__[args[2]] = value
+                            self.__models[key].save()  # save the change
 
 
 if __name__ == "__main__":
