@@ -161,10 +161,12 @@ class HBNBCommand(cmd.Cmd):
                         value = value.replace("'", "")
                     elif not value.startswith('"') and not value.endswith(
                             '"') and " " in value:
-                        value = value.split(" ")[0]  # get string at first index
+                        # get string at first i ndex
+                        value = value.split(" ")[0]
                     elif not value.startswith("'") and not value.endswith(
                             "'") and " " in value:
-                        value = value.split(" ")[0]  # get string at first index
+                        # get string at first index
+                        value = value.split(" ")[0]
 
                     # create an instance from saved objects to
                     # manuplate attributes
