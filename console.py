@@ -182,7 +182,9 @@ class HBNBCommand(cmd.Cmd):
                         # not found
                         if type(err).__name__ == "KeyError":
                             instance.__dict__[args[2]] = value
-                            instance.save()
+                            instance.save()  # save the change
+                    except (TypeError, KeyError, ValueError):
+                        pass  # for now
 
 
 if __name__ == "__main__":
