@@ -19,8 +19,8 @@ class TestUser(unittest.TestCase):
     # Test if a new User instance is stored in the
     # objects dictionary of models.storage
 
-    # def test_new_instance_stored_in_objects(self):
-    #    self.assertIn(User(), models.storage.all().values())
+    def test_new_instance_stored_in_objects(self):
+        self.assertIn(User(), models.storage.all().values())
 
     # Test that the type of User's id attribute is a string
     def test_id_is_public_str(self):

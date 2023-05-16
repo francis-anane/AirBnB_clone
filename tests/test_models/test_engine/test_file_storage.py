@@ -85,17 +85,17 @@ class TestFileStorage_methods(unittest.TestCase):
         models.storage.new(am)
         models.storage.new(rv)
         self.assertIn("BaseModel." + bm.id, models.storage.all().keys())
-        #self.assertIn(bm, models.storage.all().values())
+        self.assertIn(bm, models.storage.all().values())
         self.assertIn("User." + us.id, models.storage.all().keys())
-        #self.assertIn(us, models.storage.all().values())
+        self.assertIn(us, models.storage.all().values())
         self.assertIn("State." + st.id, models.storage.all().keys())
-        #self.assertIn(st, models.storage.all().values())
+        self.assertIn(st, models.storage.all().values())
         self.assertIn("Place." + pl.id, models.storage.all().keys())
-        #self.assertIn(pl, models.storage.all().values())
+        self.assertIn(pl, models.storage.all().values())
         self.assertIn("City." + cy.id, models.storage.all().keys())
-        #self.assertIn(cy, models.storage.all().values())
+        self.assertIn(cy, models.storage.all().values())
         self.assertIn("Amenity." + am.id, models.storage.all().keys())
-        #self.assertIn(am, models.storage.all().values())
+        self.assertIn(am, models.storage.all().values())
         self.assertIn("Review." + rv.id, models.storage.all().keys())
         self.assertIn(rv, models.storage.all().values())
 
@@ -134,9 +134,9 @@ class TestFileStorage_methods(unittest.TestCase):
             self.assertIn("Amenity." + am.id, save_text)
             self.assertIn("Review." + rv.id, save_text)
 
-    #def test_save_with_arg(self):
-    #    with self.assertRaises(TypeError):
-    #        models.storage.save(None)
+    def test_save_with_arg(self):
+        with self.assertRaises(TypeError):
+            models.storage.save(None)
 
     def test_reload(self):
         bm = BaseModel()
@@ -169,7 +169,7 @@ class TestFileStorage_methods(unittest.TestCase):
             models.storage.reload(None)
 
     def test_classes(self):
-        classes = self.storage.classes()
+        classes = models.storage.classes()
         self.assertIsInstance(classes, dict)
         self.assertIn('BaseModel', classes)
         self.assertIn('User', classes)
@@ -180,7 +180,7 @@ class TestFileStorage_methods(unittest.TestCase):
         self.assertIn('Review', classes)
 
     def test_attributes(self):
-        attributes = self.storage.attributes()
+        attributes = models.storage.attributes()
         self.assertIsInstance(attributes, dict)
         self.assertIn('BaseModel', attributes)
         self.assertIn('User', attributes)

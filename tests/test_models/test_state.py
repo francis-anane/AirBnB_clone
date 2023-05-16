@@ -21,9 +21,9 @@ class TestStateInstantiation(unittest.TestCase):
         """Test instantiation without args"""
         self.assertEqual(State, type(State()))
 
-    #def test_new_instance_stored_in_objects(self):
+    def test_new_instance_stored_in_objects(self):
         """Test new instance is stored in objects"""
-    #    self.assertIn(State(), models.storage.all().values())
+        self.assertIn(State(), models.storage.all().values())
 
     def test_id_is_public_str(self):
         """Test id is a public string attribute"""
