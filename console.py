@@ -174,8 +174,7 @@ class HBNBCommand(cmd.Cmd):
 
                             # update attribute by updating object __dict__
                             instance.__dict__[args[2]] = value
-                            # save the change
-                            instance.save()
+                            instance.save()  # save the change
                     except (TypeError, KeyError, ValueError):
                         pass  # for now
 
