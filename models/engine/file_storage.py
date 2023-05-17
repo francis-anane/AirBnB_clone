@@ -31,13 +31,13 @@ class FileStorage:
         self.__objects.update(
             {f"{type(obj).__name__}.{obj.id}": obj})
 
-    def save(self, obj):
+    def save(self):
         """ Serializes __objectts to the JSON file __file_path"""
 
         try:
             # reassign to include updated key/values of attributes
             # in the JSON file
-            self.__objects[f"{type(obj).__name__}.{obj.id}"] = obj
+            self.__objects[f"{type(self).__name__}.{self.id}"] = self
 
         except AttributeError:
             pass  # for now

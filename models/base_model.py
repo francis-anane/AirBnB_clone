@@ -41,7 +41,7 @@ class BaseModel:
                 self.created_at = datetime.now()
                 self.updated_at = datetime.now()
                 storage.new(self)
-        except TypeError as err:
+        except TypeError:
             pass  # for now
 
     def __str__(self):
@@ -53,7 +53,7 @@ class BaseModel:
     def save(self):
         """Save object updates"""
 
-        storage.save(self)  # save object to JSON file
+        storage.save()  # save object to JSON file
 
         self.updated_at = datetime.now()
 
